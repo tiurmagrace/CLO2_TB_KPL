@@ -1,15 +1,45 @@
 from core.event_manager import *
+from core.management import (
+    tambah_klien, tambah_vendor, tambah_staff, 
+    tambah_inventaris, tambah_keuangan, laporan_keuangan
+)
 from lib.utils import tampilkan_event
 
+# --- fungsi login ---
+def login():
+    admin_username = "admin"
+    admin_password = "1234"
+
+    print("=== LOGIN ADMIN ===")
+    username = input("Username: ")
+    password = input("Password: ")
+
+    if username == admin_username and password == admin_password:
+        print("\nLogin berhasil!\n")
+        return True
+    else:
+        print("\nUsername atau password salah. Akses ditolak.\n")
+        return False
+
+# --- program utama ---
 if __name__ == "__main__":
+    if not login():
+        exit()
+
     while True:
-        print("\n=== CLI EVENT PLANNER ===")
+        print("\n=== CLI EVENT ORGANIZER ===")
         print("1. Tambah Event")
         print("2. Tambah Peserta ke Event")
         print("3. Atur RSVP")
         print("4. Lihat Semua Event")
         print("5. Export Data ke File")
-        print("6. Keluar")
+        print("6. Tambah Klien")
+        print("7. Tambah Vendor")
+        print("8. Tambah Staff")
+        print("9. Tambah Inventaris")
+        print("10. Tambah Catatan Keuangan")
+        print("11. Lihat Laporan Keuangan")
+        print("12. Keluar")
 
         pilih = input("Pilih menu: ")
 
@@ -66,6 +96,41 @@ if __name__ == "__main__":
             print(f"\nSemua data berhasil diekspor ke file:\n./{file}")
 
         elif pilih == "6":
+            name = input("Nama Klien : ")
+            contact = input("Kontak     : ")
+            address = input("Alamat     : ")
+            klien = tambah_klien(name, contact, address)
+            print(f"Klien '{klien.name}' berhasil ditambahkan.")
+
+        elif pilih == "7":
+            name = input("Nama Vendor : ")
+            service = input("Layanan     : ")
+            contact = input("Kontak      : ")
+            vendor = tambah_vendor(name, service, contact)
+            print(f"Vendor '{vendor.name}' berhasil ditambahkan.")
+
+        elif pilih == "8":
+            name = input("Nama Staff : ")
+            role = input("Peran      : ")
+            staff = tambah_staff(name, role)
+            print(f"Staff '{staff.name}' berhasil ditambahkan.")
+
+        elif pilih == "9":
+            name = input("Nama Barang Inventaris: ")
+            item = tambah_inventaris(name)
+            print(f"Inventaris '{item.name}' berhasil ditambahkan.")
+
+        elif pilih == "10":
+            description = input("Deskripsi   : ")
+            amount = float(input("Jumlah (Rp) : "))
+            tipe = input("Tipe (Income/Expense): ").lower()
+            record = tambah_keuangan(description, amount, tipe)
+            print(f"Catatan keuangan '{record.description}' berhasil ditambahkan.")
+
+        elif pilih == "11":
+            laporan_keuangan()
+
+        elif pilih == "12":
             print("Terima kasih! Sampai jumpa.")
             break
 
