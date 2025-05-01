@@ -1,42 +1,47 @@
+from typing import List
 from models.event import Event
 from models.participant import Participant
-from models.rsvp_status import RSVPStatus
-from typing import List
-import csv
-from datetime import datetime
+from lib.utils import save_to_file
 
 events: List[Event] = []
 
-def tambah_event(title, location, date):
+# Tambah Event
+def tambah_event(title: str, location: str, date: str) -> Event:
     new_event = Event(title, location, date)
     events.append(new_event)
     return new_event
 
-def tambah_peserta(event_index, name):
-    participant = Participant(name)
-    events[event_index].add_participant(participant)
-    return participant
+# Tambah Peserta ke Event
+def tambah_peserta(event_idx: int, participant_name: str):
+    participant = Participant(participant_name)
+    events[event_idx].participants.append(participant)
 
-def atur_rsvp(event_index, participant_name, konfirmasi):
-    event = events[event_index]
-    for p in event.participants:
-        if p.name.lower() == participant_name.lower():
-            if konfirmasi == "ya":
-                p.status = RSVPStatus.ATTENDING
-            elif konfirmasi == "tidak":
-                p.status = RSVPStatus.NOT_ATTENDING
+# Atur RSVP
+def atur_rsvp(event_idx: int, participant_name: str, confirmation: str) -> bool:
+    event = events[event_idx]
+    for participant in event.participants:
+        if participant.name.lower() == participant_name.lower():
+            if confirmation.lower() == "ya":
+                participant.status = participant.status.CONFIRMED
+            else:
+                participant.status = participant.status.DECLINED
             return True
     return False
 
-def export_data():
-    filename = f"event_data_{datetime.now().strftime('%Y-%m-%d')}.csv"
-    with open(filename, mode='w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        writer.writerow(["Judul Event", "Lokasi", "Tanggal", "Nama Peserta", "Status Kehadiran"])
-        for event in events:
-            if event.participants:
-                for p in event.participants:
-                    writer.writerow([event.title, event.location, event.date, p.name, p.status.value])
-            else:
-                writer.writerow([event.title, event.location, event.date, "(tidak ada peserta)", ""])
+# Export data Event ke file
+def export_data() -> str:
+    data = []
+    for e in events:
+        event_info = {
+            "title": e.title,
+            "location": e.location,
+            "date": e.date,
+            "participants": [
+                {"name": p.name, "status": p.status.value}
+                for p in e.participants
+            ]
+        }
+        data.append(event_info)
+    filename = "export_event_data.json"
+    save_to_file(filename, data)
     return filename

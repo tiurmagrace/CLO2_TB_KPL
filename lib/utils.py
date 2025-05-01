@@ -1,3 +1,9 @@
+import json
+
+def save_to_file(filename, data):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
 def tampilkan_event(event):
     print("=" * 40)
     print(f"Event   : {event.title}")
