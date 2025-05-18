@@ -122,3 +122,57 @@ def lihat_laporan_keuangan():
     print("Saldo            :", format_rupiah(saldo))
 
     input("\nTekan Enter untuk kembali ke menu...")
+
+def tambah_peserta():
+    events = ambil_daftar_events()
+    if not events:
+        return print("\u26A0\ufe0f Belum ada event tersedia!")
+
+    idx = ipilih([e["title"] for e in events])
+    if idx == -1:
+        return
+
+    nama_peserta = input("Nama peserta: ").strip()
+    if not nama_peserta:
+        print("\u26A0\ufe0f Nama peserta tidak boleh kosong!")
+        return
+
+    participant_data = {
+        "name": nama_peserta,
+        "status": "Belum Dikonfirmasi"
+    }
+
+    response = requests.post(f"{API_ENDPOINTS['events']}{idx}/participants", json=participant_data)
+    if response.status_code == 201:
+        print(f"\u2705 Peserta {nama_peserta} berhasil ditambahkan ke event!")
+    else:
+        tampilkan_api_error(response)
+
+def atur_rsvp():
+    events = ambil_daftar_events()
+    if not events:
+        return print("\u26A0\ufe0f Belum ada event tersedia!")
+
+    idx = ipilih([e["title"] for e in events])
+    if idx == -1:
+        return
+
+    event = events[idx]
+    if not event.get("participants"):
+        return print("\u26A0\ufe0f Belum ada peserta di event ini!")
+
+    print("\nDaftar Peserta:")
+    for p in event["participants"]:
+        print(f"- {p['name']} | {p['status']}")
+
+    nama_peserta = input("\nNama peserta: ").strip()
+    konfirmasi = input("Hadir? (ya/tidak): ").lower().strip()
+
+    if konfirmasi not in ["ya", "tidak"]:
+        return print("\u26A0\ufe0f Masukkan 'ya' atau 'tidak' saja!")
+
+    response = requests.put(f"{API_ENDPOINTS['events']}{idx}/rsvp?name={nama_peserta}&confirmation={konfirmasi}")
+    if response.status_code == 200:
+        print("\u2705 Status RSVP berhasil diperbarui!")
+    else:
+        tampilkan_api_error(response)
