@@ -176,3 +176,25 @@ def atur_rsvp():
         print("\u2705 Status RSVP berhasil diperbarui!")
     else:
         tampilkan_api_error(response)
+        
+def login():
+    print("\n===== LOGIN EVENT ORGANIZER CLI =====")
+    return input("Username: ") == ADMIN["username"] and getpass("Password: ") == ADMIN["password"]
+
+def tampilkan_banner():
+    print("""
+    =====================================
+    =        EVENT ORGANIZER CLI        =
+    =====================================
+    """)
+    
+ENTITY = {
+    "1": ("Tambah Event", lambda: tambah_data("events", ["title", "location", "date"], {"date": POLA["tanggal"]})),
+    "2": ("Tambah Peserta", tambah_peserta),
+    "3": ("Atur RSVP", atur_rsvp),
+    "4": ("Lihat Events", lambda: lihat_data("events", ["Judul", "Lokasi", "Tanggal"], ["title", "location", "date"])),
+    "5": ("Export Data", export_data),
+    "6": ("Tambah Klien", lambda: tambah_data("clients", ["name", "contact", "address"], {"contact": POLA["kontak"]})),
+    "7": ("Lihat Daftar Klien", lambda: lihat_data("clients", ["Nama", "Kontak", "Alamat"], ["name", "contact", "address"])),
+    "8": ("Tambah Vendor", lambda: tambah_data("vendors", ["name", "service", "contact"], {"contact": POLA["kontak"]}))
+}
