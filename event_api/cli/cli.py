@@ -38,3 +38,14 @@ def lihat_data(endpoint_key, headers, keys):
         if not items: return print("\u26A0\ufe0f Belum ada data!")
         print(tabulate([[i+1]+[item.get(k,"") for k in keys] for i,item in enumerate(items)], headers=["No"]+headers, tablefmt="grid"))
     else: tampilkan_api_error(response)
+
+def export_data():
+    response = requests.get(API_ENDPOINTS["export"])
+    if response.status_code == 200:
+        folder = r"C:\Users\USER\Documents\CLO2_TB_KPL\event_api\cli"
+        filename = os.path.join(folder, "export_events.json")
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(response.json(), f, indent=4, ensure_ascii=False)
+        print(f"✅ Data berhasil diekspor ke folder '{folder}' dengan nama file: {filename}")
+    else:
+        tampilkan_api_error(response)
