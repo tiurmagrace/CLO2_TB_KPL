@@ -20,3 +20,6 @@ POLA = {
     "tanggal": r"^(0[1-9]|[12][0-9]|3[01])\s(Januari|Februari|Maret|April|Mei|Juni|Juli|Agustus|September|Oktober|November|Desember)\s\d{4}$",
     "kontak": r"^08\d{10}$"
 }
+
+def format_rupiah(angka):
+    return f"Rp {int(angka):,}".replace(",", ".")
