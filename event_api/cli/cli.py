@@ -53,3 +53,9 @@ def ambil_daftar_events():
     response = requests.get(API_ENDPOINTS["events"])
     return response.json() if response.status_code == 200 else []
 
+def ipilih(items):
+    if not items:
+        return -1
+    for i, item in enumerate(items):
+        print(f"[{i+1}] {item}")
+    return iangka("\nPilih nomor: ", 1, len(items)) - 1
