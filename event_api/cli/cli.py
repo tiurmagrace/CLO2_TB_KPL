@@ -30,3 +30,11 @@ def valid(val, pola, err):
 def iangka(msg, min_v, max_v):
     val = input(msg).strip()
     return int(val) if val.isdigit() and min_v <= int(val) <= max_v else iangka(f"Masukkan angka {min_v}-{max_v}: ", min_v, max_v)
+
+def ijumlah():
+    try:
+        j = float(input("Jumlah (Rp): ").replace('.', '').replace(',', ''))
+        return j if j > 0 else ijumlah()
+    except:
+        print("Format jumlah tidak valid!")
+        return ijumlah()
