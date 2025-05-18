@@ -14,3 +14,8 @@ API_ENDPOINTS = {
     "finance": f"{API_BASE_URL}/finance/",
     "export": f"{API_BASE_URL}/export/events"
 }
+
+def konversi_tanggal(tanggal_input: str) -> str:
+    hari, bulan_str, tahun = tanggal_input.split()
+    bulan_map = {b: i+1 for i, b in enumerate(["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"])}
+    return f"{tahun}-{bulan_map[bulan_str]:02d}-{int(hari):02d}"
