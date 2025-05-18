@@ -23,3 +23,6 @@ POLA = {
 
 def format_rupiah(angka):
     return f"Rp {int(angka):,}".replace(",", ".")
+
+def valid(val, pola, err):
+    return val if re.match(pola, val.strip()) else valid(input(f"{err}. Coba lagi: "), pola, err)
