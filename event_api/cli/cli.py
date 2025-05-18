@@ -82,3 +82,28 @@ def lihat_laporan_keuangan():
     print("Saldo            :", format_rupiah(saldo))
 
     input("\nTekan Enter untuk kembali ke menu...")
+
+def tambah_peserta():
+    events = ambil_daftar_events()
+    if not events:
+        return print("\u26A0\ufe0f Belum ada event tersedia!")
+
+    idx = ipilih([e["title"] for e in events])
+    if idx == -1:
+        return
+
+    nama_peserta = input("Nama peserta: ").strip()
+    if not nama_peserta:
+        print("\u26A0\ufe0f Nama peserta tidak boleh kosong!")
+        return
+
+    participant_data = {
+        "name": nama_peserta,
+        "status": "Belum Dikonfirmasi"
+    }
+
+    response = requests.post(f"{API_ENDPOINTS['events']}{idx}/participants", json=participant_data)
+    if response.status_code == 201:
+        print(f"\u2705 Peserta {nama_peserta} berhasil ditambahkan ke event!")
+    else:
+        tampilkan_api_error(response)
