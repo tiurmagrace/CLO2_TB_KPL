@@ -43,3 +43,13 @@ def konversi_tanggal(tanggal_input: str) -> str:
     hari, bulan_str, tahun = tanggal_input.split()
     bulan_map = {b: i+1 for i, b in enumerate(["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"])}
     return f"{tahun}-{bulan_map[bulan_str]:02d}-{int(hari):02d}"
+
+def tampilkan_api_error(response):
+    print(f"\n[ERROR] Status Code: {response.status_code}")
+    try: print(f"Detail: {response.json().get('detail', 'Tidak ada detail')}")
+    except: print(f"Response: {response.text}")
+
+def ambil_daftar_events():
+    response = requests.get(API_ENDPOINTS["events"])
+    return response.json() if response.status_code == 200 else []
+
