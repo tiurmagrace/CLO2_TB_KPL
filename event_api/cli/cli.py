@@ -59,3 +59,22 @@ def ipilih(items):
     for i, item in enumerate(items):
         print(f"[{i+1}] {item}")
     return iangka("\nPilih nomor: ", 1, len(items)) - 1
+
+def tambah_data(endpoint_key, fields, valid_map={}):
+    data = {}
+    for f in fields:
+        val = input(f"{f.capitalize()}: ").strip()
+        data[f] = valid(val, valid_map[f], f + " tidak valid") if f in valid_map else val
+    if endpoint_key == "events":
+        data["date"] = konversi_tanggal(data["date"])
+        data["participants"] = []
+    response = requests.post(API_ENDPOINTS[endpoint_key], json=data)
+    print("\u2705 Data berhasil ditambahkan!" if response.status_code == 201 else tampilkan_api_error(response))
+
+def lihat_data(endpoint_key, headers, keys):
+    response = requests.get(API_ENDPOINTS[endpoint_key])
+    if response.status_code == 200:
+        items = response.json()
+        if not items: return print("\u26A0\ufe0f Belum ada data!")
+        print(tabulate([[i+1]+[item.get(k,"") for k in keys] for i,item in enumerate(items)], headers=["No"]+headers, tablefmt="grid"))
+    else: tampilkan_api_error(response)
