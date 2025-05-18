@@ -26,3 +26,7 @@ def format_rupiah(angka):
 
 def valid(val, pola, err):
     return val if re.match(pola, val.strip()) else valid(input(f"{err}. Coba lagi: "), pola, err)
+
+def iangka(msg, min_v, max_v):
+    val = input(msg).strip()
+    return int(val) if val.isdigit() and min_v <= int(val) <= max_v else iangka(f"Masukkan angka {min_v}-{max_v}: ", min_v, max_v)
