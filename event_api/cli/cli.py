@@ -38,3 +38,10 @@ def ijumlah():
     except:
         print("Format jumlah tidak valid!")
         return ijumlah()
+    
+def ipilih(items):
+    if not items:
+        return -1
+    for i, item in enumerate(items):
+        print(f"[{i+1}] {item}")
+    return iangka("\nPilih nomor: ", 1, len(items)) - 1
