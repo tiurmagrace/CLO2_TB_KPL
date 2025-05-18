@@ -196,5 +196,13 @@ ENTITY = {
     "5": ("Export Data", export_data),
     "6": ("Tambah Klien", lambda: tambah_data("clients", ["name", "contact", "address"], {"contact": POLA["kontak"]})),
     "7": ("Lihat Daftar Klien", lambda: lihat_data("clients", ["Nama", "Kontak", "Alamat"], ["name", "contact", "address"])),
-    "8": ("Tambah Vendor", lambda: tambah_data("vendors", ["name", "service", "contact"], {"contact": POLA["kontak"]}))
+    "8": ("Tambah Vendor", lambda: tambah_data("vendors", ["name", "service", "contact"], {"contact": POLA["kontak"]})),
+    "9": ("Lihat Daftar Vendor", lambda: lihat_data("vendors", ["Nama", "Layanan", "Kontak"], ["name", "service", "contact"])),
+    "10": ("Tambah Staff", lambda: tambah_data("staff", ["name", "role"])),
+    "11": ("Lihat Daftar Staff", lambda: lihat_data("staff", ["Nama", "Peran"], ["name", "role"])),
+    "12": ("Tambah Inventaris", lambda: tambah_data("inventory", ["name", "jumlah"])),
+    "13": ("Lihat Daftar Inventaris", lambda: lihat_data("inventory", ["Nama Barang", "Jumlah", "Status"], ["name", "jumlah", "status"])),
+    "14": ("Tambah Catatan Keuangan", lambda: tambah_data("finance", ["description", "amount", "type"])),
+    "15": ("Lihat Laporan Keuangan", lihat_laporan_keuangan),
+    "16": ("Keluar", lambda: exit("Terima kasih telah menggunakan CLI Event Organizer!"))
 }
