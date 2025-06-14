@@ -1,4 +1,6 @@
+import time
 from getpass import getpass
+from memory_profiler import profile
 from event_api.cli.config import ADMIN
 from event_api.cli.handlers import (
     event_handler,
@@ -24,22 +26,29 @@ ENTITY = {
     "11": ("Lihat Daftar Staff", staff_handler.lihat_staff),
     "12": ("Tambah Inventaris", inventory_handler.tambah_inventaris),
     "13": ("Lihat Daftar Inventaris", inventory_handler.lihat_inventaris),
-    "14": ("Tambah Catatan Keuangan", finance_handler.tambah_catatan_keuangan),
-    "15": ("Lihat Laporan Keuangan", finance_handler.lihat_laporan_keuangan),
-    "16": ("Keluar", lambda: exit("Terima kasih telah menggunakan CLI Event Organizer!")),
+    "14": (
+        "Tambah Catatan Keuangan",
+        finance_handler.tambah_catatan_keuangan,
+    ),
+    "15": (
+        "Lihat Laporan Keuangan",
+        finance_handler.lihat_laporan_keuangan,
+    ),
+    "16": (
+        "Keluar",
+        lambda: print("Terima kasih telah menggunakan CLI Event Organizer!"),
+    ),
 }
 
 
 def tampilkan_banner():
     """Menampilkan banner aplikasi."""
-    print("\033c", end="")  # Membersihkan terminal dengan ANSI escape code
-    print(
-        """
+    print("\033c", end="")  # ANSI escape code untuk membersihkan terminal
+    print("""
     =====================================
-    =         EVENT ORGANIZER CLI        =
+    =        EVENT ORGANIZER CLI        =
     =====================================
-    """
-    )
+    """)
 
 
 def login():
@@ -51,12 +60,14 @@ def login():
     return username == ADMIN["username"] and password == ADMIN["password"]
 
 
+@profile
 def main():
     """Fungsi utama untuk menjalankan aplikasi CLI."""
+    start = time.perf_counter()
     tampilkan_banner()
 
     if not login():
-        print("\u274C Login gagal!")
+        print("Login gagal!")
         return
 
     while True:
@@ -89,16 +100,25 @@ def main():
 
         pilih = input("\nPilih menu: ").strip()
 
+        if pilih == "16":
+            ENTITY["16"][1]()
+            break
+
         if pilih in ENTITY:
             try:
                 ENTITY[pilih][1]()
             except Exception as e:
-                print(f"\u274C Terjadi kesalahan: {e}")
+                print(f"Terjadi kesalahan: {e}")
+
             input("\nTekan Enter untuk kembali ke menu...")
         else:
-            print("\u26A0\ufe0f Pilihan tidak valid!")
+            print("⚠ Pilihan tidak valid!")
             input("\nTekan Enter untuk lanjut...")
+
+    end = time.perf_counter()
+    print(f"\n✅ Total waktu eksekusi: {end - start:.2f} detik")
 
 
 if __name__ == "__main__":
+    main = profile(main)
     main()
